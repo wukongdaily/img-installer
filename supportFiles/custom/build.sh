@@ -15,6 +15,7 @@ echo Copy supporting documents into the chroot
 cp -v /supportFiles/installChroot.sh $HOME/LIVE_BOOT/chroot/installChroot.sh
 cp -v /supportFiles/custom/ddd $HOME/LIVE_BOOT/chroot/usr/bin/ddd
 chmod +x $HOME/LIVE_BOOT/chroot/usr/bin/ddd
+chmod +x $HOME/LIVE_BOOT/chroot/installChroot.sh
 cp -v /supportFiles/sources.list $HOME/LIVE_BOOT/chroot/etc/apt/sources.list
 
 echo Mounting dev / proc / sys
