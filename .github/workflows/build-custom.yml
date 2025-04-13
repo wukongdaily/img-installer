@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       download_url:
-        description: '请输入下载地址(扩展名 .img.gz/.img.xz/.img.zip)'
+        description: 'https://github.com/ophub/amlogic-s9xxx-armbian/releases/download/Armbian_noble_save_2025.04/Armbian_25.05.0-noble_rootfs.tar.gz'
         required: true
         default: 'https://default.example.com/file.img.gz'
 
