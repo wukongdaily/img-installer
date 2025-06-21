@@ -6,7 +6,7 @@ on:
       download_url:
         description: '请输入下载地址(扩展名 .img.gz/.img.xz/.img.zip)'
         required: true
-        default: 'https://default.example.com/file.img.gz'
+        default: 'https://github.com/firker/openwrt-Exclusive/releases/download/2025.04.12-0507/2025-04-11-openwrt-x86-64-generic-squashfs-combined-efi.img.gz'
 
 jobs:
   build-release:
