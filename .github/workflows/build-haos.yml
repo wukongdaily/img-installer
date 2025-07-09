@@ -6,7 +6,7 @@ on:
       download_url:
         description: '请输入haos下载地址(扩展名 .img.gz/.img.xz/.img.zip)'
         required: true
-        default: 'https://github.com/home-assistant/operating-system/releases/download/15.0/haos_generic-x86-64-15.0.img.xz'
+        default: 'https://github.com/home-assistant/operating-system/releases/download/16.0.rc3/haos_generic-x86-64-16.0.rc3.img.xz'
 
 jobs:
   build-release:
