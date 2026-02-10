@@ -2,9 +2,9 @@
 mkdir -p imm
 #https://github.com/wukongdaily/AutoBuildImmortalWrt/releases/download/Autobuild-x86-64/immortalwrt-24.10.0-x86-64-generic-squashfs-combined-efi.img.gz
 
-REPO="wukongdaily/AutoBuildImmortalWrt"
+REPO="lxfx-code/AutoBuildImmortalWrt"
 TAG="img-installer"
-FILE_NAME="immortalwrt-24.10.2-x86-64-generic-squashfs-combined-efi.img.gz"
+FILE_NAME="immortalwrt-24-7G-x86-efi.img.gz"
 OUTPUT_PATH="imm/immortalwrt.img.gz"
 
 DOWNLOAD_URL=$(curl -s https://api.github.com/repos/$REPO/releases/tags/$TAG | jq -r '.assets[] | select(.name == "'"$FILE_NAME"'") | .browser_download_url')
