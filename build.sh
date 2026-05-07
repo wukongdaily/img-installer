@@ -3,23 +3,17 @@ mkdir -p armbian
 
 # 读取环境变量 (带默认值)
 VERSION_TYPE="${VERSION_TYPE:-standard}"
-if [ "$VERSION_TYPE" = "debian13_minimal" ]; then
-  echo "构建debian13_minimal-armbian..."
-  URL="https://dl.armbian.com/uefi-x86/Trixie_current_minimal"
-elif [ "$VERSION_TYPE" = "ubuntu26_minimal" ]; then
-  echo "构建ubuntu26_minimal-armbian..." 
-  URL="https://dl.armbian.com/uefi-x86/Resolute_current_minimal"
-elif [ "$VERSION_TYPE" = "homeassistant" ]; then
-  echo "构建homeassistant全家桶版armbian..." 
-  URL="https://dl.armbian.com/uefi-x86/Trixie_current_server-homeassistant"
-else 
-  echo "无效信息"
-  exit 1
-fi
-
+case "$VERSION_TYPE" in
+  "debian13_minimal") echo "构建debian13_minimal-armbian..."
+    URL="https://dl.armbian.com/uefi-x86/Trixie_current_minimal" ;;
+  "ubuntu26_minimal") echo "构建ubuntu26_minimal-armbian..."
+    URL="https://dl.armbian.com/uefi-x86/Resolute_current_minimal" ;;
+  "homeassistant") echo "构建homeassistant全家桶版armbian..."
+    URL="https://dl.armbian.com/uefi-x86/Trixie_current_server-homeassistant" ;;
+  *) echo "无效信息"; exit 1 ;;
+esac
 eval "`curl -sILOJ -w 'DOWNLOAD_URL="%{url_effective}"\nFILE_NAME="%{filename_effective}"\n' "$URL"`"
 [ -f "$FILE_NAME" ] && rm "$FILE_NAME"
-
 OUTPUT_PATH="armbian/armbian.img.xz"
 
 if [[ -z "$DOWNLOAD_URL" ]]; then
