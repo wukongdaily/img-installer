@@ -24,7 +24,9 @@ detect_disk() {
     echo "Available disks:" >&2
     for i in "${!disks[@]}"; do
         size=$(lsblk -d -n -b -o SIZE ${disks[i]} | awk '{printf "%.2f GB", $1/1000000000}')
-        printf "%2d. %-12s %8s\n" $((i+1)) "${disks[i]}" "$size" >&2
+        vendor=$(lsblk -d -n -b -o VENDOR ${disks[i]})
+        model=$(lsblk -d -n -b -o MODEL ${disks[i]})
+        printf "%2d. %-12s %8s\n" $((i+1)) "${disks[i]} | $vendor $model |" "$size" >&2
     done
 
     # User selection logic
