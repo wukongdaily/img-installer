@@ -3,7 +3,7 @@ mkdir -p openwrt
 
 INFO="`curl -s "https://fwindex.koolcenter.com/api/fw/device" --data-raw '{"deviceName":"x86_64_efi","firmwareName":"iStoreOS"}' | jq -r ".result.releases[0]"`"
 export VERSION="`echo $INFO | jq .release`"
-cat "supportFiles/istoreos/info.md" | envsubst '${VERSION}' | tee "supportFiles/istoreos/info.md" > /dev/null
+cat "supportFiles/istoreos/info.md.template" | envsubst '${VERSION}' | tee "supportFiles/istoreos/info.md" > /dev/null
 DOWNLOAD_URL="`echo $INFO | jq .url`"
 FILE_NAME="${DOWNLOAD_URL##*/}"
 OUTPUT_PATH="openwrt/istoreos.img.gz"
