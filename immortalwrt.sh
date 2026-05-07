@@ -1,9 +1,16 @@
 #!/bin/bash
 mkdir -p imm
+
 # DOMAIN 改成 downloads.openwrt.org 就是OpenWrt原版的（
 FILE_TYPE="squashfs-combined-efi.img.gz"
 DOMAIN="downloads.immortalwrt.org"
-VERSION="`curl -s https://$DOMAIN/.versions.json | jq -r .stable_version`"
+
+export VERSION="`curl -s https://$DOMAIN/.versions.json | jq -r .stable_version`"
+if [[ -z "$VERSION" || "$VERSION" == "null" ]]; then
+  echo "无法获取版本号"
+  exit 1
+fi
+cat "supportFiles/immortalwrt/info.md.template" | envsubst '${VERSION}' | tee "supportFiles/immortalwrt/info.md" > /dev/null
 URL_PREFIX="https://$DOMAIN/releases/$VERSION/targets/x86/64"
 FILE_NAME="`curl -s $URL_PREFIX/profiles.json | jq -r --arg type "$FILE_TYPE" \
    '.profiles.generic.images[] | select(.name | contains($type)) | .name'`"

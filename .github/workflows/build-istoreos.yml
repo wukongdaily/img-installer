@@ -1,4 +1,4 @@
-name: "Build iStoreOS 24.10.1 Installer ISO"
+name: "Build iStoreOS Installer ISO"
 
 on:
  workflow_dispatch:
@@ -24,6 +24,3 @@ jobs:
           body_path: ${{ github.workspace }}/supportFiles/istoreos/info.md
           files: |
             output/istoreos-installer-x86_64.iso
-          token: ${{ secrets.GITHUB_TOKEN }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

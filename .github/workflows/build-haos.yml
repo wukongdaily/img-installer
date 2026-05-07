@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       download_url:
-        description: '请输入haos下载地址(扩展名 .img.gz/.img.xz/.img.zip)'
+        description: '请输入haos下载地址(扩展名 .img.gz/.img.xz/.img.zip) 若不填写则自动获取最新'
         required: false
         default: 'latest'
 

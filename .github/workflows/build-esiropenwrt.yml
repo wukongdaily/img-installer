@@ -27,6 +27,3 @@ jobs:
           body_path: ${{ github.workspace }}/supportFiles/esirplayground/info.md
           files: |
             output/esiropenwrt-installer-x86_64.iso
-          token: ${{ secrets.GITHUB_TOKEN }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

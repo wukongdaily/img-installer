@@ -48,4 +48,3 @@ jobs:
           body_path: ${{ github.workspace }}/info.md
           files: |
             output/armbian-installer-x86_64-${{ github.event.inputs.version_type }}.iso
-          token: ${{ secrets.GITHUB_TOKEN }}
