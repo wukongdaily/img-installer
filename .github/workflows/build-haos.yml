@@ -5,8 +5,8 @@ on:
     inputs:
       download_url:
         description: '请输入haos下载地址(扩展名 .img.gz/.img.xz/.img.zip)'
-        required: true
-        default: 'https://github.com/home-assistant/operating-system/releases/download/15.0/haos_generic-x86-64-15.0.img.xz'
+        required: false
+        default: 'latest'
 
 jobs:
   build-release:
@@ -17,16 +17,11 @@ jobs:
       - name: "Checking out git repository"
         uses: actions/checkout@v2
 
-      - name: Set executable permissions
-        run: |
-          chmod +x "${{ github.workspace }}/haos.sh"
-          chmod +x "${{ github.workspace }}/supportFiles/haos/build.sh"
-
       - name: Validate Download URL
         run: |
           USER_INPUT_URL="${{ github.event.inputs.download_url }}"
           
-          if [[ ! "$USER_INPUT_URL" =~ ^https?://.+\.[gG][zZ]$|^https?://.+\.[xX][zZ]$|^https?://.+\.[zZ][iI][pP]$ ]]; then
+          if [[ "$USER_INPUT_URL" != "latest" && ! "$USER_INPUT_URL" =~ ^https?://.+\.[gG][zZ]$|^https?://.+\.[xX][zZ]$|^https?://.+\.[zZ][iI][pP]$ ]]; then
             echo "❌ 错误：地址需以 http(s) 开头且扩展名为 .gz/.xz/.zip"
             echo "当前输入：$USER_INPUT_URL"
             exit 1
@@ -44,4 +39,3 @@ jobs:
           body_path: "${{ github.workspace }}/supportFiles/haos/info.md"
           files: |
             output/haos-installer-x86_64.iso
-          token: "${{ secrets.GITHUB_TOKEN }}"

@@ -1,21 +1,14 @@
 #!/bin/bash
 mkdir -p imm
-#https://github.com/wukongdaily/AutoBuildImmortalWrt/releases/download/Autobuild-x86-64/immortalwrt-24.10.0-x86-64-generic-squashfs-combined-efi.img.gz
-
-REPO="wukongdaily/AutoBuildImmortalWrt"
-TAG="img-installer"
-FILE_NAME="immortalwrt-24.10.2-x86-64-generic-squashfs-combined-efi.img.gz"
+# DOMAIN 改成 downloads.openwrt.org 就是OpenWrt原版的（
+FILE_TYPE="squashfs-combined-efi.img.gz"
+DOMAIN="downloads.immortalwrt.org"
+VERSION="`curl -s https://$DOMAIN/.versions.json | jq -r .stable_version`"
+URL_PREFIX="https://$DOMAIN/releases/$VERSION/targets/x86/64"
+FILE_NAME="`curl -s $URL_PREFIX/profiles.json | jq -r --arg type "$FILE_TYPE" \
+   '.profiles.generic.images[] | select(.name | contains($type)) | .name'`"
+DOWNLOAD_URL="$URL_PREFIX/$FILE_NAME"
 OUTPUT_PATH="imm/immortalwrt.img.gz"
-
-DOWNLOAD_URL=$(curl -s https://api.github.com/repos/$REPO/releases/tags/$TAG | jq -r '.assets[] | select(.name == "'"$FILE_NAME"'") | .browser_download_url')
-
-# 此处可以替换op固件下载地址,但必须是 直链才可以,网盘那种地址是不行滴。举3个例子
-# 原版OpenWrt
-# DOWNLOAD_URL="https://downloads.openwrt.org/releases/24.10.0/targets/x86/64/openwrt-24.10.0-x86-64-generic-squashfs-combined-efi.img.gz"
-# 原版immortalwrt
-# DOWNLOAD_URL="https://downloads.immortalwrt.org/releases/24.10.0/targets/x86/64/immortalwrt-24.10.0-x86-64-generic-squashfs-combined-efi.img.gz"
-# 原版KWRT
-# DOWNLOAD_URL="https://dl.openwrt.ai/releases/24.10/targets/x86/64/kwrt-03.08.2025-x86-64-generic-squashfs-combined-efi.img.gz"
 
 if [[ -z "$DOWNLOAD_URL" ]]; then
   echo "错误：未找到文件 $FILE_NAME"

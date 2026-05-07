@@ -8,8 +8,20 @@ if [ -z "$1" ]; then
 fi
 
 mkdir -p imm
-DOWNLOAD_URL="$1"
-filename=$(basename "$DOWNLOAD_URL")  # 从 URL 提取文件名
+
+if [ "$1" = "latest" ]; then
+  FILE_TYPE="generic-x86-64"
+  GH_JSON="`curl -s https://api.github.com/repos/home-assistant/operating-system/releases/latest`"
+  DOWNLOAD_URL="`echo "$GH_JSON" | jq -r --arg type "$FILE_TYPE" \
+    '.assets[] | select(.name | contains($type) and endswith(".img.xz")) | .browser_download_url'`"
+  if [[ -z "$DOWNLOAD_URL" ]]; then
+    echo "错误：自动获取url失败"
+    exit 1
+  fi
+else
+  DOWNLOAD_URL="$1"
+fi
+filename="`basename "$DOWNLOAD_URL"`"  # 从 URL 提取文件名
 OUTPUT_PATH="imm/$filename"
 
 echo "下载地址: $DOWNLOAD_URL"
