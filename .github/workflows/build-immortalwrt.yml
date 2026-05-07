@@ -20,8 +20,6 @@ jobs:
         run: |
           ./immortalwrt.sh
       
-      - name: "Sertting info.md version"
-      
       - name: "Publish"
         uses: softprops/action-gh-release@v2.2.1
         with:
