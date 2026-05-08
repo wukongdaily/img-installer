@@ -15,7 +15,7 @@ jobs:
 
       - name: "Build iStoreOS Installer ISO"
         run: |
-          ./istoreos.sh
+          ./build/istoreos.sh
       
       - name: "Publish"
         uses: softprops/action-gh-release@v2.2.1

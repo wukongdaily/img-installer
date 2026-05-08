@@ -30,7 +30,7 @@ jobs:
       - name: "Build Image"
         run: |
           download_url="${{ github.event.inputs.download_url }}"
-          ./haos.sh "$download_url"
+          ./build/haos.sh "$download_url"
 
       - name: "Publish"
         uses: softprops/action-gh-release@v2.2.1

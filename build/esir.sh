@@ -33,6 +33,13 @@ else
 fi
 
 mkdir -p output
+export GRUB_TITLE="eSirPlayGround OpenWrt x86-UEFI Installer [EFI/GRUB]"
+export ISOLINUX_TITLE="eSirPlayGround OpenWrt Installer"
+export DDD_TITLE="eSirPlayGround OpenWrt Installer"
+export DDD_SUBTITLE="eSirPlayGround OpenWrt GDQ"
+cat "supportFiles/_template/grub.cfg" | envsubst '${GRUB_TITLE}' | tee "supportFiles/esirplayground/grub.cfg" > /dev/null
+cat "supportFiles/_template/isolinux.cfg" | envsubst '${ISOLINUX_TITLE}' | tee "supportFiles/esirplayground/isolinux.cfg" > /dev/null
+cat "supportFiles/_template/ddd" | envsubst '${DDD_TITLE},${DDD_SUBTITLE}' | tee "supportFiles/esirplayground/ddd" > /dev/null
 docker run --privileged --rm \
         -v $(pwd)/output:/output \
         -v $(pwd)/supportFiles:/supportFiles:ro \

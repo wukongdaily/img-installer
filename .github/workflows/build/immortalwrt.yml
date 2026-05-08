@@ -1,4 +1,4 @@
-name: "Build EzOpWrt Installer ISO"
+name: "Build ImmortalWrt Installer ISO"
 
 on:
  workflow_dispatch:
@@ -18,12 +18,12 @@ jobs:
 
       - name: "Build Image"
         run: |
-          ./ezopwrt.sh
+          ./build/immortalwrt.sh
       
       - name: "Publish"
         uses: softprops/action-gh-release@v2.2.1
         with:
-          tag_name: "EzOpWrt-Installer-x86_64-ISO"
-          body_path: ${{ github.workspace }}/supportFiles/ezopwrt/info.md
+          tag_name: "ImmortalWrt-Installer-x86_64-ISO"
+          body_path: ${{ github.workspace }}/supportFiles/immortalwrt/info.md
           files: |
-            output/ezopwrt-installer-x86_64.iso
+            output/immortalwrt-installer-x86_64.iso

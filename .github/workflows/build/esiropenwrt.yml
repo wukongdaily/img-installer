@@ -18,7 +18,7 @@ jobs:
 
       - name: "Build Image"
         run: |
-          ./esir.sh
+          ./build/esir.sh
       
       - name: "Publish"
         uses: softprops/action-gh-release@v2.2.1

@@ -63,6 +63,13 @@ else
 fi
 
 mkdir -p output
+GRUB_TITLE="Custom OpenWrt x86-UEFI Installer [EFI/GRUB]"
+ISOLINUX_TITLE="Custom OpenWrt Installer"
+export DDD_TITLE="Custom OpenWrt Installer"
+export DDD_SUBTITLE="Custom OpenWrt"
+cat "supportFiles/_template/grub.cfg" | envsubst '${GRUB_TITLE}' | tee "supportFiles/custom/grub.cfg" > /dev/null
+cat "supportFiles/_template/isolinux.cfg" | envsubst '${ISOLINUX_TITLE}' | tee "supportFiles/custom/isolinux.cfg" > /dev/null
+cat "supportFiles/_template/ddd" | envsubst '${DDD_TITLE},${DDD_SUBTITLE}' | tee "supportFiles/custom/ddd" > /dev/null
 docker run --privileged --rm \
     -v $(pwd)/output:/output \
     -v $(pwd)/supportFiles:/supportFiles:ro \

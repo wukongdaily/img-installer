@@ -25,7 +25,7 @@ echo Install Debian
 debootstrap --arch=amd64 --variant=minbase buster $HOME/LIVE_BOOT/chroot http://archive.debian.org/debian/
 echo Copy supporting documents into the chroot
 cp -v /supportFiles/installChroot.sh $HOME/LIVE_BOOT/chroot/installChroot.sh
-cp -v /supportFiles/ddd $HOME/LIVE_BOOT/chroot/usr/bin/ddd
+cp -v /supportFiles/armbian/ddd $HOME/LIVE_BOOT/chroot/usr/bin/ddd
 chmod +x $HOME/LIVE_BOOT/chroot/usr/bin/ddd
 cp -v /supportFiles/sources.list $HOME/LIVE_BOOT/chroot/etc/apt/sources.list
 

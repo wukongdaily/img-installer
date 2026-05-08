@@ -36,7 +36,7 @@ jobs:
       - name: "Build Image"
         run: |
           download_url="${{ github.event.inputs.download_url }}"
-          ./custom.sh "$download_url"
+          ./build/custom.sh "$download_url"
 
       - name: "Publish"
         uses: softprops/action-gh-release@v2.2.1

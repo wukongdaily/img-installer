@@ -2,12 +2,13 @@
 
 show_menu() {
     clear
-    echo "=========================================="
-    echo "  HAOS Installer by wukongdaily"
-    echo "=========================================="
-    echo "1. Install HAOS"
+    echo "====================================================="
+    echo "  ${DDD_TITLE}"
+    echo "  by wukongdaily"
+    echo "====================================================="
+    echo "1. Install ${DDD_SUBTITLE}"
     echo "0. Quit"
-    echo "====================================="
+    echo "====================================================="
 }
 
 detect_disk() {
@@ -93,7 +94,7 @@ install_system() {
     dd if="$image_file" of="$target_disk" bs=4M conv=fsync status=progress
     
     echo "──────────────────────────────────────"
-    echo "HAOS installed successfully:"
+    echo "iStoreOS installed successfully:"
 }
 
 while true; do
@@ -102,7 +103,7 @@ while true; do
     
     case $choice in
         1)
-            install_system "haos.img"
+            install_system "istoreos.img"
             break
             ;;
         0)
