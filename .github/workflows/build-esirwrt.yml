@@ -1,4 +1,4 @@
-name: "Build eSirOpenWrt Installer ISO"
+name: "Build eSirWrt Installer ISO"
 
 on:
  workflow_dispatch:
@@ -18,12 +18,12 @@ jobs:
 
       - name: "Build Image"
         run: |
-          ./build/esir.sh
+          ./build/esirwrt.sh
       
       - name: "Publish"
         uses: softprops/action-gh-release@v2.2.1
         with:
-          tag_name: "eSirOpenWrt-Installer-x86_64-ISO"
-          body_path: ${{ github.workspace }}/supportFiles/esirplayground/info.md
+          tag_name: "eSirWrt-Installer-x86_64-ISO"
+          body_path: ${{ github.workspace }}/supportFiles/esirwrt/info.md
           files: |
-            output/esiropenwrt-installer-x86_64.iso
+            output/esirwrt-installer-x86_64.iso

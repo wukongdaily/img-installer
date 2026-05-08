@@ -7,9 +7,10 @@ echo "最新TAG: $TAG"
 # 获取该 Tag 下所有以 .img.gz 结尾的文件
 DOWNLOAD_URLS=$(curl -sL "https://api.github.com/repos/$REPO/releases/tags/$TAG" \
   | jq -r '.assets[] | select(.name | endswith("img.gz")) | .browser_download_url')
+
 # 保存位置
-mkdir -p imm
-OUTPUT_PATH="imm/ezopwrt.img.gz"
+mkdir -p _output
+OUTPUT_PATH="_output/ezopwrt.img.gz"
 
 if [ -z "$DOWNLOAD_URLS" ]; then
   echo "Error: No .img.gz files found under tag $TAG"
@@ -22,10 +23,10 @@ curl -L -o "$OUTPUT_PATH" "$FIRST_DOWNLOAD_URL"
 
 if [[ $? -eq 0 ]]; then
   echo "下载ezopwrt成功!"
-  file imm/ezopwrt.img.gz
+  file _output/ezopwrt.img.gz
   echo "正在解压为:ezopwrt.img"
-  gzip -d imm/ezopwrt.img.gz
-  ls -lh imm/
+  gzip -d _output/ezopwrt.img.gz
+  ls -lh _output/
   echo "准备合成 EzOpWrt 安装器"
 else
   echo "下载失败！"
@@ -38,12 +39,14 @@ export ISOLINUX_TITLE="EzOpWrt Vip-Super Installer"
 export DDD_TITLE="EzOpWrt Installer"
 export DDD_SUBTITLE="EzOpWrt Vip-Super"
 export DDD_IMAGE_FILE_NAME="ezopwrt.img"
-cat "supportFiles/_template/grub.cfg" | envsubst '${GRUB_TITLE}' | tee "supportFiles/ezopwrt/grub.cfg" > /dev/null
-cat "supportFiles/_template/isolinux.cfg" | envsubst '${ISOLINUX_TITLE}' | tee "supportFiles/ezopwrt/isolinux.cfg" > /dev/null
-cat "supportFiles/_template/ddd" | envsubst '${DDD_TITLE},${DDD_SUBTITLE},${DDD_IMAGE_FILE_NAME}' | tee "supportFiles/ezopwrt/ddd" > /dev/null
+export DEB_LIVE_BUILD_NAME="ezopwrt"
+cat "supportFiles/_template/grub.cfg" | envsubst '${GRUB_TITLE}' | tee "supportFiles/$DEB_LIVE_BUILD_NAME/grub.cfg" > /dev/null
+cat "supportFiles/_template/isolinux.cfg" | envsubst '${ISOLINUX_TITLE}' | tee "supportFiles/$DEB_LIVE_BUILD_NAME/isolinux.cfg" > /dev/null
+cat "supportFiles/_template/ddd" | envsubst '${DDD_TITLE},${DDD_SUBTITLE},${DDD_IMAGE_FILE_NAME}'  | tee "supportFiles/$DEB_LIVE_BUILD_NAME/ddd" > /dev/null
+cat "supportFiles/_template/build.sh" | envsubst '${DEB_LIVE_BUILD_NAME}'  | tee "supportFiles/$DEB_LIVE_BUILD_NAME/build.sh" > /dev/null
 docker run --privileged --rm \
-        -v $(pwd)/output:/output \
-        -v $(pwd)/supportFiles:/supportFiles:ro \
-        -v $(pwd)/imm/ezopwrt.img:/mnt/ezopwrt.img \
-        debian:buster \
-        /supportFiles/ezopwrt/build.sh
+  -v $(pwd)/output:/output \
+  -v $(pwd)/supportFiles:/supportFiles:ro \
+  -v $(pwd)/_output/$DDD_IMAGE_FILE_NAME:/mnt/$DDD_IMAGE_FILE_NAME \
+  debian:buster \
+  /supportFiles/$DEB_LIVE_BUILD_NAME/build.sh
