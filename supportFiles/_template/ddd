@@ -96,7 +96,7 @@ install_system() {
     dd if="$image_file" of="$target_disk" bs=4M conv=fsync status=progress
     
     echo "──────────────────────────────────────"
-    echo "iStoreOS installed successfully:"
+    echo "${DDD_SUBTITLE} installed successfully:"
 }
 
 while true; do
