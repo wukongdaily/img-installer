@@ -4,7 +4,7 @@ show_menu() {
     clear
     echo "====================================================="
     echo "  ${DDD_TITLE}"
-    echo "  by wukongdaily"
+    echo "    by wukongdaily & 8Mi-Tech"
     echo "====================================================="
     echo "1. Install ${DDD_SUBTITLE}"
     echo "0. Quit"
@@ -13,8 +13,9 @@ show_menu() {
 
 detect_disk() {
     # Get all available disks
-    #root_disk=$(lsblk -no PKNAME $(findmnt -nvo SOURCE /))
-    local disks=($(lsblk -d -n -o NAME,RO,TYPE,TRAN | awk '$3 == "disk" && $2 == "0" && $4 != "usb" {print $1}' | grep -v "^$root_disk$" | awk '{print "/dev/"$1}'))
+    ventoy_disk="`vtoydump | grep "disk name" | awk -F": /dev/" ''`"
+    [ -n "$ventoy_disk" ] && echo "Your Ventoy Disk is /dev/$ventoy_disk"
+    local disks=($(lsblk -d -n -o NAME,RO,TYPE | awk '$3 == "disk" && $2 == "0" {print $1}' | grep -v "^$ventoy_disk$" | awk '{print "/dev/"$1}'))
 
     # Error handling
     if [ ${#disks[@]} -eq 0 ]; then
