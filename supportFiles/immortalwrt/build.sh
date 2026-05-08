@@ -31,6 +31,8 @@ cp -v /supportFiles/installChroot.sh $HOME/LIVE_BOOT/chroot/installChroot.sh
 cp -v /supportFiles/immortalwrt/ddd $HOME/LIVE_BOOT/chroot/usr/bin/ddd
 chmod +x $HOME/LIVE_BOOT/chroot/usr/bin/ddd
 cp -v /supportFiles/sources.list $HOME/LIVE_BOOT/chroot/etc/apt/sources.list
+wget -O $HOME/LIVE_BOOT/chroot/usr/bin/vtoydump https://github.com/ventoy/vtoydump/raw/master/bin/linux/x86_64/vtoydump
+chmod +x $HOME/LIVE_BOOT/chroot/usr/bin/vtoydump
 
 echo Mounting dev / proc / sys
 mount -t proc none $HOME/LIVE_BOOT/chroot/proc
