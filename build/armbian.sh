@@ -42,9 +42,10 @@ export GRUB_TITLE="Armbian x86-UEFI Installer [EFI/GRUB]"
 export ISOLINUX_TITLE="Armbian Installer"
 export DDD_TITLE="Armbian x86-UEFI Installer"
 export DDD_SUBTITLE="Armbian x86-UEFI"
+export DDD_IMAGE_FILE_NAME="armbian.img"
 cat "supportFiles/_template/grub.cfg" | envsubst '${GRUB_TITLE}' | tee "supportFiles/armbian/grub.cfg" > /dev/null
 cat "supportFiles/_template/isolinux.cfg" | envsubst '${ISOLINUX_TITLE}' | tee "supportFiles/armbian/isolinux.cfg" > /dev/null
-cat "supportFiles/_template/ddd" | envsubst '${DDD_TITLE},${DDD_SUBTITLE}' | tee "supportFiles/armbian/ddd" > /dev/null
+cat "supportFiles/_template/ddd" | envsubst '${DDD_TITLE},${DDD_SUBTITLE},${DDD_IMAGE_FILE_NAME}' | tee "supportFiles/armbian/ddd" > /dev/null
 docker run --privileged --rm \
         -v $(pwd)/output:/output \
         -v $(pwd)/supportFiles:/supportFiles:ro \

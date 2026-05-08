@@ -103,7 +103,7 @@ while true; do
     
     case $choice in
         1)
-            install_system "istoreos.img"
+            install_system "${DDD_IMAGE_FILE_NAME}"
             break
             ;;
         0)

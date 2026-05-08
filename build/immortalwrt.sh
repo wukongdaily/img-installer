@@ -43,9 +43,10 @@ export GRUB_TITLE="ImmortalWrt x86-UEFI Installer [EFI/GRUB]"
 export ISOLINUX_TITLE="ImmortalWrt Installer"
 export DDD_TITLE="Immortalwrt Installer"
 export DDD_SUBTITLE="Immortalwrt"
+export DDD_IMAGE_FILE_NAME="immortalwrt.img"
 cat "supportFiles/_template/grub.cfg" | envsubst '${GRUB_TITLE}' | tee "supportFiles/immortalwrt/grub.cfg" > /dev/null
 cat "supportFiles/_template/isolinux.cfg" | envsubst '${ISOLINUX_TITLE}' | tee "supportFiles/immortalwrt/isolinux.cfg" > /dev/null
-cat "supportFiles/_template/ddd" | envsubst '${DDD_TITLE},${DDD_SUBTITLE}' | tee "supportFiles/immortalwrt/ddd" > /dev/null
+cat "supportFiles/_template/ddd" | envsubst '${DDD_TITLE},${DDD_SUBTITLE},${DDD_IMAGE_FILE_NAME}' | tee "supportFiles/immortalwrt/ddd" > /dev/null
 docker run --privileged --rm \
         -v $(pwd)/output:/output \
         -v $(pwd)/supportFiles:/supportFiles:ro \

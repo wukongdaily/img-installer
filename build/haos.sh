@@ -79,9 +79,10 @@ export GRUB_TITLE="HAOS x86-UEFI Installer [EFI/GRUB]"
 export ISOLINUX_TITLE="HAOS Installer"
 export DDD_TITLE="HAOS Installer"
 export DDD_SUBTITLE="HAOS"
+export DDD_IMAGE_FILE_NAME="haos.img"
 cat "supportFiles/_template/grub.cfg" | envsubst '${GRUB_TITLE}' | tee "supportFiles/haos/grub.cfg" > /dev/null
 cat "supportFiles/_template/isolinux.cfg" | envsubst '${ISOLINUX_TITLE}' | tee "supportFiles/haos/isolinux.cfg" > /dev/null
-cat "supportFiles/_template/ddd" | envsubst '${DDD_TITLE},${DDD_SUBTITLE}' | tee "supportFiles/haos/ddd" > /dev/null
+cat "supportFiles/_template/ddd" | envsubst '${DDD_TITLE},${DDD_SUBTITLE},${DDD_IMAGE_FILE_NAME}' | tee "supportFiles/haos/ddd" > /dev/null
 docker run --privileged --rm \
         -v $(pwd)/output:/output \
         -v $(pwd)/supportFiles:/supportFiles:ro \

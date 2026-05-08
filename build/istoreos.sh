@@ -34,9 +34,10 @@ export GRUB_TITLE="iStoreOS x86-UEFI Installer [EFI/GRUB]"
 export ISOLINUX_TITLE="iStoreOS Installer for Virtual Machine"
 export DDD_TITLE="iStoreOS Installer for all virtual machine"
 export DDD_SUBTITLE="iStoreOS"
+export DDD_IMAGE_FILE_NAME="istoreos.img"
 cat "supportFiles/_template/grub.cfg" | envsubst '${GRUB_TITLE}' | tee "supportFiles/istoreos/grub.cfg" > /dev/null
 cat "supportFiles/_template/isolinux.cfg" | envsubst '${ISOLINUX_TITLE}' | tee "supportFiles/istoreos/isolinux.cfg" > /dev/null
-cat "supportFiles/_template/ddd" | envsubst '${DDD_TITLE},${DDD_SUBTITLE}' | tee "supportFiles/istoreos/ddd" > /dev/null
+cat "supportFiles/_template/ddd" | envsubst '${DDD_TITLE},${DDD_SUBTITLE},${DDD_IMAGE_FILE_NAME}'  | tee "supportFiles/istoreos/ddd" > /dev/null
 docker run --privileged --rm \
         -v $(pwd)/output:/output \
         -v $(pwd)/supportFiles:/supportFiles:ro \
