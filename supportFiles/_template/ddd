@@ -13,7 +13,10 @@ show_menu() {
 
 detect_disk() {
     # Get all available disks
-    local disks=($(lsblk -d -n -o NAME,RO,TYPE | awk '$3 == "disk" && $2 == "0" {print "/dev/"$1}'))
+    root_disk=$(lsblk -no PKNAME $(findmnt -nvo SOURCE /))
+    echo "Debug: detect your usb maybe is /dev/$root_disk,"
+    echo "Debug: `lsblk -d -n -b -o VENDOR $root_disk` `lsblk -d -n -b -o MODEL $root_disk` `lsblk -d -n -b -o SIZE $root_disk | awk '{printf "%.2f GB", $1/1000000000}'`"
+    local disks=($(lsblk -d -n -o NAME,RO,TYPE | awk '$3 == "disk" && $2 == "0" {print $1}' | grep -v "^$root_disk$" | awk '{print "/dev/"$1}'))
 
     # Error handling
     if [ ${#disks[@]} -eq 0 ]; then
