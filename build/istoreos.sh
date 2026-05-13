@@ -7,6 +7,7 @@ export VERSION="`echo $INFO | jq .release`"
 cat "supportFiles/istoreos/info.md.template" | envsubst '${VERSION}' | tee "supportFiles/istoreos/info.md" > /dev/null
 DOWNLOAD_URL="`echo $INFO | jq .url`"
 FILE_NAME="${DOWNLOAD_URL##*/}"
+echo $DOWNLOAD_URL
 
 OUTPUT_PATH="_output/istoreos.img.gz"
 
