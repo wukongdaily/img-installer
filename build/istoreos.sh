@@ -1,8 +1,9 @@
 #!/bin/bash
 mkdir -p _output
 
-INFO="`curl -s "https://fwindex.koolcenter.com/api/fw/device" --data-raw '{"deviceName":"x86_64_efi","firmwareName":"iStoreOS"}' | jq -r ".result.releases[0]"`"
-echo curl Result: $INFO
+CURL_INFO="`curl -s "https://fwindex.koolcenter.com/api/fw/device" --data-raw '{"deviceName":"x86_64_efi","firmwareName":"iStoreOS"}' `"
+echo curl Result: $CURL_INFO
+INFO=`echo $CURL_INFO | jq -r ".result.releases[0]"`
 export VERSION="`echo $INFO | jq .release`"
 cat "supportFiles/istoreos/info.md.template" | envsubst '${VERSION}' | tee "supportFiles/istoreos/info.md" > /dev/null
 DOWNLOAD_URL="`echo $INFO | jq .url`"
