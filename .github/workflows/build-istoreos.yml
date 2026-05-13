@@ -1,4 +1,4 @@
-name: "Build iStoreOS 24.10.1 Installer ISO"
+name: "Build iStoreOS Installer ISO"
 
 on:
  workflow_dispatch:
@@ -12,15 +12,10 @@ jobs:
 
       - name: "Checking out git repository"
         uses: actions/checkout@v2
-      
-      - name: Set executable permissions
-        run: |
-          chmod +x ${{ github.workspace }}/istoreos.sh
-          chmod +x ${{ github.workspace }}/supportFiles/istoreos/build.sh
 
       - name: "Build iStoreOS Installer ISO"
         run: |
-          ./istoreos.sh
+          ./build/istoreos.sh
       
       - name: "Publish"
         uses: softprops/action-gh-release@v2.2.1
@@ -29,6 +24,3 @@ jobs:
           body_path: ${{ github.workspace }}/supportFiles/istoreos/info.md
           files: |
             output/istoreos-installer-x86_64.iso
-          token: ${{ secrets.GITHUB_TOKEN }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

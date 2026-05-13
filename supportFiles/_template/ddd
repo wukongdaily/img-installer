@@ -2,17 +2,20 @@
 
 show_menu() {
     clear
-    echo "====================================="
-    echo "  EzOpWrt Installer by wukongdaily"
-    echo "====================================="
-    echo "1. Install EzOpWrt Vip-Super"
+    echo "====================================================="
+    echo "  ${DDD_TITLE}"
+    echo "    by wukongdaily & 8Mi-Tech"
+    echo "====================================================="
+    echo "1. Install ${DDD_SUBTITLE}"
     echo "0. Quit"
-    echo "====================================="
+    echo "====================================================="
 }
 
 detect_disk() {
     # Get all available disks
-    local disks=($(lsblk -d -n -o NAME,RO,TYPE | awk '$3 == "disk" && $2 == "0" {print "/dev/"$1}'))
+    ventoy_disk="`vtoydump | grep "disk name" | awk -F": /dev/" ''`"
+    [ -n "$ventoy_disk" ] && echo "Your Ventoy Disk is /dev/$ventoy_disk"
+    local disks=($(lsblk -d -n -o NAME,RO,TYPE | awk '$3 == "disk" && $2 == "0" {print $1}' | grep -v "^$ventoy_disk$" | awk '{print "/dev/"$1}'))
 
     # Error handling
     if [ ${#disks[@]} -eq 0 ]; then
@@ -24,7 +27,9 @@ detect_disk() {
     echo "Available disks:" >&2
     for i in "${!disks[@]}"; do
         size=$(lsblk -d -n -b -o SIZE ${disks[i]} | awk '{printf "%.2f GB", $1/1000000000}')
-        printf "%2d. %-12s %8s\n" $((i+1)) "${disks[i]}" "$size" >&2
+        vendor=$(lsblk -d -n -b -o VENDOR ${disks[i]})
+        model=$(lsblk -d -n -b -o MODEL ${disks[i]})
+        printf "%2d. %-12s %8s\n" $((i+1)) "${disks[i]} | $vendor $model |" "$size" >&2
     done
 
     # User selection logic
@@ -91,7 +96,7 @@ install_system() {
     dd if="$image_file" of="$target_disk" bs=4M conv=fsync status=progress
     
     echo "──────────────────────────────────────"
-    echo "EzOpWrt installed successfully:"
+    echo "${DDD_SUBTITLE} installed successfully:"
 }
 
 while true; do
@@ -100,7 +105,7 @@ while true; do
     
     case $choice in
         1)
-            install_system "ezopwrt.img"
+            install_system "${DDD_IMAGE_FILE_NAME}"
             break
             ;;
         0)

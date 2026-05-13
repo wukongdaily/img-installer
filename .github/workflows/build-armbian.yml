@@ -1,0 +1,50 @@
+name: "Build Armbian Installer ISO"
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_type:
+        description: "版本类型"
+        required: true
+        default: "standard"
+        type: choice
+        options:
+          - "debian13_minimal"
+          - "ubuntu26_minimal"
+          - "homeassistant"
+
+jobs:
+  build-release:
+    runs-on: ubuntu-22.04
+    env:
+      VERSION_TYPE: ${{ github.event.inputs.version_type }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Image
+        run: ./build/armbian.sh
+
+      - name: "Prepare Release Assets"
+        run: |
+          # 根据版本类型重命名ISO文件
+          if [ "$VERSION_TYPE" = "debian13_minimal" ]; then
+            mv output/armbian-installer-x86_64.iso output/armbian-installer-x86_64-debian13_minimal.iso
+          fi
+
+          if [ "$VERSION_TYPE" = "ubuntu26_minimal" ]; then
+            mv output/armbian-installer-x86_64.iso output/armbian-installer-x86_64-ubuntu26_minimal.iso
+          fi
+
+          if [ "$VERSION_TYPE" = "homeassistant" ]; then
+            mv output/armbian-installer-x86_64.iso output/armbian-installer-x86_64-homeassistant.iso
+          fi
+          
+
+      - name: "Publish"
+        uses: softprops/action-gh-release@v2.2.1
+        with:
+          tag_name: "Armbian-Installer-x86_64-ISO"
+          body_path: ${{ github.workspace }}/supportFiles/armbian/info.md
+          files: |
+            output/armbian-installer-x86_64-${{ github.event.inputs.version_type }}.iso

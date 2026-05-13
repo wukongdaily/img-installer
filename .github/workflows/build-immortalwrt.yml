@@ -15,15 +15,10 @@ jobs:
 
       - name: "Checking out git repository"
         uses: actions/checkout@v2
-      
-      - name: Set executable permissions
-        run: |
-          chmod +x ${{ github.workspace }}/imm.sh
-          chmod +x ${{ github.workspace }}/supportFiles/immortalwrt/build.sh
 
       - name: "Build Image"
         run: |
-          ./imm.sh
+          ./build/immortalwrt.sh
       
       - name: "Publish"
         uses: softprops/action-gh-release@v2.2.1
@@ -32,6 +27,3 @@ jobs:
           body_path: ${{ github.workspace }}/supportFiles/immortalwrt/info.md
           files: |
             output/immortalwrt-installer-x86_64.iso
-          token: ${{ secrets.GITHUB_TOKEN }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,52 @@
+#!/bin/bash
+
+REPO="wkccd/esirOpenWrt"
+TAG=$(curl -sL "https://api.github.com/repos/$REPO/releases/latest" | jq -r '.tag_name // empty')
+[ -z "$TAG" ] && TAG=$(curl -sL "https://api.github.com/repos/$REPO/tags" | jq -r '.[0].name')
+echo "最新TAG: $TAG"
+# 获取该 Tag 下所有以 .img.gz 结尾的文件
+DOWNLOAD_URLS=$(curl -sL "https://api.github.com/repos/$REPO/releases/tags/$TAG" \
+  | jq -r '.assets[] | select(.name | endswith("img.gz")) | .browser_download_url')
+# 保存位置
+
+mkdir -p _output
+OUTPUT_PATH="_output/esiropenwrt.img.gz"
+
+if [ -z "$DOWNLOAD_URLS" ]; then
+  echo "Error: No .img.gz files found under tag $TAG"
+  exit 1
+fi
+
+FIRST_DOWNLOAD_URL=$(echo "$DOWNLOAD_URLS" | head -n1)
+echo "下载地址: $FIRST_DOWNLOAD_URL"
+curl -L -o "$OUTPUT_PATH" "$FIRST_DOWNLOAD_URL"
+
+if [[ $? -eq 0 ]]; then
+  echo "下载esiropenwrt成功!"
+  file _output/esiropenwrt.img.gz
+  echo "正在解压为:esiropenwrt.img"
+  gzip -d _output/esiropenwrt.img.gz
+  ls -lh _output/
+  echo "准备合成 eSirOpenWrt 安装器"
+else
+  echo "下载失败！"
+  exit 1
+fi
+
+mkdir -p output
+export GRUB_TITLE="eSirPlayGround OpenWrt x86-UEFI Installer [EFI/GRUB]"
+export ISOLINUX_TITLE="eSirPlayGround OpenWrt Installer"
+export DDD_TITLE="eSirPlayGround OpenWrt Installer"
+export DDD_SUBTITLE="eSirPlayGround OpenWrt GDQ"
+export DDD_IMAGE_FILE_NAME="esirwrt.img"
+export DEB_LIVE_BUILD_NAME="esirwrt"
+cat "supportFiles/_template/grub.cfg" | envsubst '${GRUB_TITLE}' | tee "supportFiles/$DEB_LIVE_BUILD_NAME/grub.cfg" > /dev/null
+cat "supportFiles/_template/isolinux.cfg" | envsubst '${ISOLINUX_TITLE}' | tee "supportFiles/$DEB_LIVE_BUILD_NAME/isolinux.cfg" > /dev/null
+cat "supportFiles/_template/ddd" | envsubst '${DDD_TITLE},${DDD_SUBTITLE},${DDD_IMAGE_FILE_NAME}'  | tee "supportFiles/$DEB_LIVE_BUILD_NAME/ddd" > /dev/null
+cat "supportFiles/_template/build.sh" | envsubst '${DEB_LIVE_BUILD_NAME}'  | tee "supportFiles/$DEB_LIVE_BUILD_NAME/build.sh" > /dev/null
+docker run --privileged --rm \
+  -v $(pwd)/output:/output \
+  -v $(pwd)/supportFiles:/supportFiles:ro \
+  -v $(pwd)/_output/$DDD_IMAGE_FILE_NAME:/mnt/$DDD_IMAGE_FILE_NAME \
+  debian:buster \
+  /supportFiles/$DEB_LIVE_BUILD_NAME/build.sh
