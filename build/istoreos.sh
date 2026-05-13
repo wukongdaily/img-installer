@@ -1,7 +1,7 @@
 #!/bin/bash
 mkdir -p _output
 
-CURL_INFO="`curl -s "https://fwindex.koolcenter.com/api/fw/device" --data-raw '{"deviceName":"x86_64_efi","firmwareName":"iStoreOS"}' `"
+CURL_INFO="`curl "https://fwindex.koolcenter.com/api/fw/device" --data-raw '{"deviceName":"x86_64_efi","firmwareName":"iStoreOS"}' `"
 echo curl Result: $CURL_INFO
 INFO=`echo $CURL_INFO | jq -r ".result.releases[0]"`
 export VERSION="`echo $INFO | jq .release`"
