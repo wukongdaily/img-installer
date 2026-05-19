@@ -5,7 +5,7 @@ show_menu() {
     echo "====================================="
     echo "  Immortalwrt Installer by wukongdaily"
     echo "====================================="
-    echo "1. Install Immortalwrt 24.10.1 (1GB)"
+    echo "1. Install Immortalwrt 25.12.0-rc2 (2GB)"
     echo "0. Quit"
     echo "====================================="
 }
